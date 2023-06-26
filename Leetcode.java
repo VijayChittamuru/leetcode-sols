@@ -1,16 +1,109 @@
 import java.util.Arrays;
 import java.util.HashMap;
 
-
 public class Leetcode {
 
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
 
-        int[] a1 = {0, 2, 1, 1};
-        lcTest.sortColors(a1);
-        System.out.println(Arrays.toString(a1));
+        
     }  
+
+    // Sets entire row/col of a matrix to 0 if they have a 0 in them
+    public void setZeroes(int[][] matrix) {
+        // Edge cases if 1 dimensional matrix
+        if(matrix.length == 1) {
+            boolean isZero = false;
+            for(int i = 0; i < matrix[0].length; i++){
+                if(matrix[0][i] == 0){
+                    isZero = true;
+                    break;
+                }
+            }
+            if(isZero) {
+                for(int i = 0; i < matrix[0].length; i++)
+                    matrix[0][i] = 0;
+            }
+            return;
+        }
+
+        if(matrix[0].length == 1) {
+            boolean isZero = false;
+            for(int i = 0; i < matrix.length; i++){
+                if(matrix[i][0] == 0){
+                    isZero = true;
+                    break;
+                }
+            }
+            if(isZero) {
+                for(int i = 0; i < matrix.length; i++)
+                    matrix[i][0] = 0;
+            }
+            return;
+        }
+        
+        boolean firstRowZ = false, firstColZ = false, bothZ = false;
+        // Runs through only first row and column to find zeroes
+        if(matrix[0][0] == 0)
+            bothZ = true;
+        else {
+            for(int i = 0; i < matrix[0].length; i++) {
+                if(matrix[0][i] == 0) {
+                    firstColZ = true;
+                    break;
+                }
+            }
+            for(int i = 0; i < matrix.length; i++) {
+                if(matrix[i][0] == 0) {
+                    firstRowZ = true;
+                    break;
+                }
+            }
+        }   
+        
+        // Runs through the whole array and finds zeroes
+        for(int i = 1; i < matrix.length; i++){
+            for(int j = 1; j < matrix[i].length; j++) {
+                if(matrix[i][j] == 0) {
+                    matrix[0][j] = 0;
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+
+        // Sets the *rows* of matrix to zeroes
+        for(int i = 1; i < matrix.length; i++) {
+            if(matrix[i][0] == 0) {
+                for(int j = 0; j < matrix[i].length; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        // Sets the *columns* of matrix to zeroes
+        for(int j = 1; j < matrix[0].length; j++) {
+            if(matrix[0][j] == 0) {
+                for(int i = 0; i < matrix.length; i++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        // Finally sets the first row/col
+        if(bothZ) {
+            for(int i = 0; i < matrix[0].length; i++)
+                matrix[0][i] = 0;
+            for(int i = 0; i < matrix.length; i++)
+                matrix[i][0] = 0;
+            return;
+        }
+        if(firstColZ)
+            for(int i = 0; i < matrix[0].length; i++)
+                matrix[0][i] = 0;
+        if(firstRowZ)
+            for(int i = 0; i < matrix.length; i++)
+                matrix[i][0] = 0;
+    }
 
     // Solves the problem though doesn't technically 'sort'
     // Still fast and constant memory
@@ -31,21 +124,6 @@ public class Leetcode {
         
         for(int i = numZ+numO; i < nums.length; i++)
             nums[i] = 2;
-    }
-
-    // Not done
-    public void setZeroes(int[][] matrix) {
-        for(int i = 1; i < matrix.length; i++) {
-            for(int j = 1; j < matrix[i].length; j++) {
-                if(matrix[i][j] == 0) {
-                    matrix[i][0] = 0;
-                    matrix[0][j] = 0;
-                }
-            }
-        }
-
-        // Check first row/column if zero change rest of row
-        // Change first ones last
     }
 
     // Alternate solution: return Math.pow(x, n);
@@ -378,6 +456,7 @@ public class Leetcode {
 
         return result.toString();
     }
+    
     // WIP, faster but not complete
     public String convert2(String s, int numRows) {
         StringBuilder result = new StringBuilder();

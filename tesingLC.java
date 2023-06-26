@@ -21,6 +21,18 @@ public class tesingLC {
 
     // Test cases not in use
     public static void main(String args[]) {
+        //Testing setZeroes method
+        /*int[][] a1 = {{1, -100, 1}, {2, 1, 2}};
+
+        for(int i = 0; i < a1.length; i++) {
+            System.out.println(Arrays.toString(a1[i]));
+        }
+        System.out.println();
+        lcTest.setZeroes(a1);
+        for(int i = 0; i < a1.length; i++) {
+            System.out.println(Arrays.toString(a1[i]));
+        } */
+        
         // Testing reverse method
         /*System.out.println(lcTest.reverse(-1234));
         System.out.println(lcTest.reverse(1));

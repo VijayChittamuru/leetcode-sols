@@ -1,13 +1,44 @@
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class Leetcode {
 
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
-
         
+        String[] strings = {"){"};
+
+        for(String s: strings)
+            System.out.println(lcTest.isValidParentheses(s));
     }  
+
+    public boolean isValidParentheses(String s) {
+        if(s.length() == 1)
+            return false;
+        Stack<Character> stack = new Stack<Character>();
+        Character c = null;
+        for(int i = 0; i < s.length(); i++) {
+            // Push open chars onto stack
+            if(s.charAt(i) == '(' || s.charAt(i) == '{' || s.charAt(i) == '[')
+                stack.push(s.charAt(i));
+            
+            // First encountered char is closing bracket
+            else if(stack.isEmpty())
+                return false;
+            
+            else {
+                c = stack.pop();
+                // Must close in same order as opened
+                if((s.charAt(i) == ')' && c != '(') || 
+                   (s.charAt(i) == '}' && c != '{') || 
+                   (s.charAt(i) == ']' && c != '['))
+                    return false;
+            }
+        }
+        // If stack isn't empty, only encountered opening brackets
+        return stack.isEmpty();
+    }
 
     // Sets entire row/col of a matrix to 0 if they have a 0 in them
     public void setZeroes(int[][] matrix) {
@@ -556,7 +587,7 @@ public class Leetcode {
     }
 
     // Finds the median value of two sorted arrays
-    // Can check when combined length is odd, not even (yet)
+    // Can check only when combined length is odd. Even is WIP
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         
         // Cases when 1 array is empty

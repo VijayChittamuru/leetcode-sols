@@ -7,11 +7,134 @@ public class Leetcode {
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
         
-        String[] strings = {"){"};
-
-        for(String s: strings)
-            System.out.println(lcTest.isValidParentheses(s));
+        int n = 1500;
+        System.out.println(lcTest.intToRoman(n));
+        
     }  
+
+    public String intToRoman(int num) {
+        StringBuilder result = new StringBuilder();
+
+        int currentNum = 0;
+        
+        // Start with 1000s
+        currentNum = num/1000;
+        for (int i = 0; i < currentNum; i++) {
+            result.append('M');
+        }
+
+        num = num % 1000;
+
+        // Next check for 900, then 500, then 400
+        if(num / 900 == 1){
+            result.append("CM");
+            num = num % 900;
+        }
+        if(num / 500 == 1) {
+            result.append('D');
+            num = num % 500;
+        }
+        if(num / 400 == 1) {
+            result.append("CD");
+            num = num % 400;
+        }
+
+        // Next check 100s
+        currentNum = num / 100;
+        for(int i = 0; i < currentNum; i++) {
+            result.append('C');
+        }
+        num = num % 100;
+
+        // Next check for 90, then 50, then 40
+        if(num / 90 == 1){
+            result.append("XC");
+            num = num % 90;
+        }
+        if(num / 50 == 1) {
+            result.append('L');
+            num = num % 50;
+        }
+        if(num / 40 == 1) {
+            result.append("XL");
+            num = num % 40;
+        }
+
+        // Next check 10s
+        currentNum = num / 10;
+        for(int i = 0; i < currentNum; i++) {
+            result.append('X');
+        }
+        num = num % 10;
+
+        // Next check for 90, then 50, then 40
+        if(num / 9 == 1){
+            result.append("IX");
+            num = num % 9;
+        }
+        if(num / 5 == 1) {
+            result.append('V');
+            num = num % 5;
+        }
+        if(num / 4 == 1) {
+            result.append("IV");
+            num = num % 4;
+        }
+
+        // Finally, check 1s
+        currentNum = num / 1;
+        for(int i = 0; i < currentNum; i++)
+            result.append('I');
+        num = num % 1;
+
+        return result.toString();
+    }
+
+    public int longestValidParentheses(String s) {
+        int result = 0, current = 0;
+        /*Stack<Character> stack = new Stack<Character>();
+
+        for(int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) == '(')
+                stack.push(s.charAt(i));
+            else if(stack.isEmpty()) {
+                current = 0;
+                continue;
+            }
+            else {
+                result = Math.max(result, current);
+            }
+        }*/
+        return result; 
+    }
+
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        // Always removes at least 1 val, and can't remove more than 1 if len = 1
+        if(head.next == null)
+            return null;
+
+        ListNode tracker = head;
+        int length = 0;
+        while(tracker != null) {
+            length++;
+            tracker = tracker.next;
+        }
+
+        // Remove first element
+        if(length == n) 
+            return head.next;
+
+        int toRemove = length - n;
+
+        tracker = head;
+
+        for(int i = 1; i < toRemove; i++)
+            tracker = tracker.next;
+
+        tracker.next = tracker.next.next;
+
+        return head;
+    }
 
     public boolean isValidParentheses(String s) {
         if(s.length() == 1)
@@ -606,13 +729,13 @@ public class Leetcode {
                 return (nums2[length/2] + nums2[(length/2) - 1])/2;
         }
 
-        double totalLength = nums1.length + nums2.length;
+
+        int totalLength = nums1.length + nums2.length;
         int result = 0;
 
         // length is odd
         if(totalLength % 2 == 1) {
-
-            int index = (int)Math.floor(totalLength/2);
+            int index = totalLength/2;
             int count = 0, i = 0, j = 0;
             while(count != index+1) {
                 if(nums1[i] < nums2[j]) {
@@ -635,12 +758,15 @@ public class Leetcode {
         ListNode() {}
         ListNode(int val) { this.val = val; }
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-
-        public ListNode create(int[] values) {
-            ListNode result = null;
-
-            return result;
+    }
+    public ListNode create(int[] values) {
+        ListNode tracker = new ListNode();
+        ListNode head = tracker;
+        for(int i = 0; i < values.length; i++) {
+            tracker.next = new ListNode(values[i]);
+            tracker = tracker.next;
         }
+        return head.next;
     }
 
     // Adds two numbers where each digit is a node in a linked list

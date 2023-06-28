@@ -1,17 +1,106 @@
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 public class Leetcode {
 
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
         
-        int n = 1;
-        System.out.println(lcTest.intToRoman(n));
+        String[] s = {"eat", "tea", "tan", "ate", "nat", "bat"};
+        System.out.println(lcTest.groupAnagrams(s).toString());
         
     }  
 
+    public List<List<String>> groupAnagrams(String[] strs) {
+        ArrayList<List<String>> list = new ArrayList<List<String>>();
+        boolean[] checked = new boolean[strs.length];
+        Pattern pattern;
+        Matcher matcher;
+        
+
+        for(int i = 0; i < strs.length; i++) {
+            if(!checked[i]) {
+                StringBuilder regex = new StringBuilder();
+                ArrayList<String> toAdd = new ArrayList<String>();
+                checked[i] = true;
+                regex.append("^[");
+                regex.append(strs[i]);
+                regex.append("]+$");
+                pattern = Pattern.compile(regex.toString());
+
+                for(int j = i; j < strs.length; j++) {
+                    if(!checked[j]) {
+                        matcher = pattern.matcher(strs[j]);
+                        if(matcher.matches()) {
+                            toAdd.add(strs[j]);
+                            checked[j] = true;
+                        }
+                    }
+                }
+                toAdd.add(strs[i]);
+                list.add(toAdd);
+            }
+        }
+
+        return list;
+    }
+
+    // not done
+    public List<String> letterCombinations(String digits) {
+        ArrayList<String> result = new ArrayList<String>();
+        /*double numToAdd = Math.pow(3, digits.length() - 1);
+        for(int i = 0; i < digits.length(); i++) {
+            if(digits.charAt(i) == '9' || digits.charAt(i) == '6')
+                numToAdd++;
+        }
+
+        ArrayList<StringBuilder> a = new ArrayList<StringBuilder>();
+        // Adds all elements from the first digit to the list
+        if(digits.length() > 0) {
+            String s = Leetcode.phoneDigit(digits.charAt(0));
+            for(int i = 0; i < s.length(); i++) {
+                for(int j = 0; j < numToAdd; j++) {
+                    a.add(new StringBuilder(s.charAt(i)));
+                }
+            }
+        }
+
+        if(digits.length() > 1) {
+            for(int i = 0; i < a.size();) {
+
+            }
+        } */
+
+        return result;
+    }
+    // helper method
+    private static String phoneDigit(char c){
+        if(c == '2')
+            return "abc";
+        if(c == '3')
+            return "def";
+        if(c == '4')
+            return "ghi";
+        if(c == '5')
+            return "jkl";
+        if(c == '6')
+            return "mno";
+        if(c == '7')
+            return "pqrs";
+        if(c == '8')
+            return "tuv";
+        if(c == '9')
+            return "wxyz";
+        return null;
+    }
+
+    // Converts an integer to roman numeral
     public String intToRoman(int num) {
         StringBuilder result = new StringBuilder();
 
@@ -758,6 +847,16 @@ public class Leetcode {
         ListNode() {}
         ListNode(int val) { this.val = val; }
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+        public String toString() {
+            ArrayList<Integer> s = new ArrayList<Integer>();
+            ListNode temp = this;
+            while(temp != null){
+                s.add(temp.val);
+                temp = temp.next;
+            }
+
+            return s.toString();
+        }
     }
     public ListNode create(int[] values) {
         ListNode tracker = new ListNode();

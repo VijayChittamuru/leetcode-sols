@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.text.html.HTMLDocument.HTMLReader.CharacterAction;
+
 import java.util.ArrayList;
 
 public class Leetcode {
@@ -12,20 +15,51 @@ public class Leetcode {
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
         
-        String[] s = {"eat", "tea", "tan", "ate", "nat", "bat"};
-        System.out.println(lcTest.groupAnagrams(s).toString());
+        String[] s1 = {"eat", "ate", "tan", "ate", "nat", "bat"};
+        String[] s2 = {" "};
+        System.out.println(lcTest.groupAnagrams(s1).toString());
         
-    }  
+    }
 
+    // Store chars in map with indices, check at end for validity
+    // Not done
+    public boolean isNumber(String s) {
+        if(s.charAt(0) != '.' || s.charAt(0) != '+' || 
+           s.charAt(0) != '-' || !Character.isDigit(s.charAt(0))) 
+            return false;
+        
+        // Stores character and it's index value
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+
+        for(int i = 0; i < s.length(); i++) {
+            if(Character.isAlphabetic(s.charAt(i))) {
+                if(s.charAt(i) == 'e' || s.charAt(i) == 'E'){
+                    // NaN because 2+ 'E' exist
+                    if(map.containsKey(Character.toLowerCase(s.charAt(i))))
+                        return false;
+                    else
+                        map.put(Character.toLowerCase(s.charAt(i)), i);
+                }
+
+            }
+        }
+
+        return false;
+    }
+
+    // Does not work for strings with same chars same lengths but different
+    // frequency of chars, like dgggg and gdddd because regex.
     public List<List<String>> groupAnagrams(String[] strs) {
         ArrayList<List<String>> list = new ArrayList<List<String>>();
         boolean[] checked = new boolean[strs.length];
         Pattern pattern;
         Matcher matcher;
-        
+        ArrayList<String> empty = new ArrayList<String>();
 
         for(int i = 0; i < strs.length; i++) {
-            if(!checked[i]) {
+            if(strs[i].isEmpty())
+                empty.add(strs[i]);
+            else if(!checked[i]) {
                 StringBuilder regex = new StringBuilder();
                 ArrayList<String> toAdd = new ArrayList<String>();
                 checked[i] = true;
@@ -37,7 +71,7 @@ public class Leetcode {
                 for(int j = i; j < strs.length; j++) {
                     if(!checked[j]) {
                         matcher = pattern.matcher(strs[j]);
-                        if(matcher.matches()) {
+                        if(matcher.matches() && strs[i].length() == strs[j].length()) {
                             toAdd.add(strs[j]);
                             checked[j] = true;
                         }
@@ -47,6 +81,8 @@ public class Leetcode {
                 list.add(toAdd);
             }
         }
+        if(!empty.isEmpty())
+            list.add(empty);
 
         return list;
     }
@@ -75,12 +111,12 @@ public class Leetcode {
             for(int i = 0; i < a.size();) {
 
             }
-        } */
-
+        }
+        */
         return result;
     }
     // helper method
-    private static String phoneDigit(char c){
+    private static String phoneDigits(char c){
         if(c == '2')
             return "abc";
         if(c == '3')
@@ -100,7 +136,7 @@ public class Leetcode {
         return null;
     }
 
-    // Converts an integer to roman numeral
+    // Converts an integer to roman numerals
     public String intToRoman(int num) {
         StringBuilder result = new StringBuilder();
 
@@ -179,24 +215,7 @@ public class Leetcode {
         return result.toString();
     }
 
-    public int longestValidParentheses(String s) {
-        int result = 0, current = 0;
-        /*Stack<Character> stack = new Stack<Character>();
-
-        for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i) == '(')
-                stack.push(s.charAt(i));
-            else if(stack.isEmpty()) {
-                current = 0;
-                continue;
-            }
-            else {
-                result = Math.max(result, current);
-            }
-        }*/
-        return result; 
-    }
-
+    // Removes the Nth node going backwards in a linked list
     public ListNode removeNthFromEnd(ListNode head, int n) {
         // Always removes at least 1 val, and can't remove more than 1 if len = 1
         if(head.next == null)
@@ -225,6 +244,7 @@ public class Leetcode {
         return head;
     }
 
+    // Checks if parentheses sequence is valid
     public boolean isValidParentheses(String s) {
         if(s.length() == 1)
             return false;

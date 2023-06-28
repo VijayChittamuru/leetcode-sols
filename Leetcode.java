@@ -7,7 +7,7 @@ public class Leetcode {
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
         
-        int n = 1500;
+        int n = 1;
         System.out.println(lcTest.intToRoman(n));
         
     }  

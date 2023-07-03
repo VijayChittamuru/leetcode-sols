@@ -4,25 +4,54 @@ import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.tree.TreeNode;
-
 import java.util.ArrayList;
-
 public class Leetcode {
 
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
         
-        String s1 = "abcedfg";
-        String s2 = "bacdefg";
-        System.out.println(lcTest.buddyStrings(s1, s2));
+        TreeNode root = lcTest.new TreeNode(32);
+        root.left = lcTest.new TreeNode(26, lcTest.new TreeNode(19, null, lcTest.new TreeNode(27)), null);  
+        root.right = lcTest.new TreeNode(47, null, lcTest.new TreeNode(56));
+        System.out.println(lcTest.isValidBST(root));
         
     }
 
+    
+
+    // helper method to find max value of tree
+    private int maxValue(TreeNode root) {
+        if(root == null)
+            return Integer.MIN_VALUE;
+        int val = root.val;
+        int leftMax = maxValue(root.left);
+        int rightMax = maxValue(root.right);
+
+        return Math.max(val, Math.max(leftMax, rightMax));
+    }
+
+    // helper method to find min value of tree
+    private int minValue(TreeNode root) {
+        if(root == null)
+            return Integer.MAX_VALUE;
+        int val = root.val;
+        int leftMin = minValue(root.left);
+        int rightMin = minValue(root.right);
+
+        return Math.min(val, Math.min(leftMin, rightMin));
+    }
+
+    // Works, but slow-ish and lot of memory
     public boolean isValidBST(TreeNode root) {
-        
-        return false;
+        // Base case
+        if(root == null)
+            return true;
+        if(root.left != null && root.val <= maxValue(root.left))
+            return false;
+        if(root.right != null && root.val >= minValue(root.right))
+            return false;
+
+        return isValidBST(root.left) && isValidBST(root.right);
     }
 
     public String addBinary(String a, String b) {

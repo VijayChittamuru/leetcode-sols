@@ -1,12 +1,11 @@
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.CharacterAction;
+import javax.swing.tree.TreeNode;
 
 import java.util.ArrayList;
 
@@ -15,10 +14,93 @@ public class Leetcode {
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
         
-        String[] s1 = {"eat", "ate", "tan", "ate", "nat", "bat"};
-        String[] s2 = {" "};
-        System.out.println(lcTest.groupAnagrams(s1).toString());
+        String s1 = "abcedfg";
+        String s2 = "bacdefg";
+        System.out.println(lcTest.buddyStrings(s1, s2));
         
+    }
+
+    public boolean isValidBST(TreeNode root) {
+        
+        return false;
+    }
+
+    public String addBinary(String a, String b) {
+        // Doesn't work w/ binary > max integer
+        /*// parseInt w/ radix 2 converts binary string to decimal
+        int sum = Integer.parseInt(a, 2) + Integer.parseInt(b,2);
+        // Converts sum back to binary string
+        String result = Integer.toBinaryString(sum);
+        return result; */
+
+        int i = (a.length() - 1), j = (b.length() - 1), sum = 0, carry = 0;
+        StringBuilder result = new StringBuilder();
+        while(i >= 0 && j >= 0) {
+            sum = carry + (int)(a.charAt(i--) + b.charAt(j--) - '0' - '0');
+            carry = sum - 1;
+            if(sum % 2 == 1)
+                sum = 1;
+            else
+                sum = 0;
+            result.append(sum);
+        }
+
+        while(i >= 0) {
+            sum = carry + (int)(a.charAt(i--) - '0');
+            carry = sum - 1;
+            if(sum % 2 == 1)
+                sum = 1;
+            else
+                sum = 0;
+            result.append(sum);
+        }
+
+        while(j >= 0) {
+            sum = carry + (int)(b.charAt(j--) - '0');
+            carry = sum - 1;
+            if(sum % 2 == 1)
+                sum = 1;
+            else
+                sum = 0;
+            result.append(sum);
+        }
+        result.append(Integer.toBinaryString(carry));
+        return result.reverse().toString();
+    }
+
+    public boolean buddyStrings(String s, String goal) {
+        if(s.length() != goal.length())
+            return false;
+        if(s.length() == 1)
+            return false;
+
+        if(s.equals(goal)){
+            int[] a = new int[26];
+            for(int i = 0; i < s.length(); i++) {
+                // If char was already in string, then it can be swapped with itself if s == goal
+                if(a[s.charAt(i) - 'a'] != 0)
+                    return true;
+                a[s.charAt(i) - 'a']++;
+            }
+        }
+
+        int count = 0;
+        char s1 = ' ', g1 = ' ';
+
+        for(int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) != goal.charAt(i)) {
+                count++;
+                // first time finding unequal chars
+                if(s1 == ' ') {
+                    s1 = s.charAt(i);
+                    g1 = goal.charAt(i);
+                }
+                else if(goal.charAt(i) != s1 || s.charAt(i) != g1)
+                    return false;
+            }
+        }
+
+        return count == 2;
     }
 
     // Store chars in map with indices, check at end for validity
@@ -860,24 +942,7 @@ public class Leetcode {
 
         return result;
     }
-
-    public class ListNode {
-        int val;
-        ListNode next;
-        ListNode() {}
-        ListNode(int val) { this.val = val; }
-        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-        public String toString() {
-            ArrayList<Integer> s = new ArrayList<Integer>();
-            ListNode temp = this;
-            while(temp != null){
-                s.add(temp.val);
-                temp = temp.next;
-            }
-
-            return s.toString();
-        }
-    }
+    
     public ListNode create(int[] values) {
         ListNode tracker = new ListNode();
         ListNode head = tracker;
@@ -932,4 +997,34 @@ public class Leetcode {
         return result.next;
     }
 
+    public class ListNode {
+        int val;
+        ListNode next;
+        ListNode() {}
+        ListNode(int val) { this.val = val; }
+        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+        public String toString() {
+            ArrayList<Integer> s = new ArrayList<Integer>();
+            ListNode temp = this;
+            while(temp != null){
+                s.add(temp.val);
+                temp = temp.next;
+            }
+
+            return s.toString();
+        }
+    }
+
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode() {}
+        TreeNode(int val) { this.val = val; }
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
 }

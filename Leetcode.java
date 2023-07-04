@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -12,11 +13,90 @@ public class Leetcode {
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
         
-        TreeNode root = lcTest.cTree(1, null, lcTest.cTree(2, lcTest.cTree(3), null));
-        System.out.println(lcTest.preorderTraversal(root));
+        
+        System.out.println(lcTest.isPowerOfTwo(536870912));
+
+    }
+    public boolean isPowerOfTwo(int n) {
+        if(n == 0)
+            return false;
+        double x = Math.log(n)/Math.log(2);
+        return (Math.pow(2, Math.round(x)) == n);
+    }
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        // Value, Index
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++) {
+            if(map.containsKey(nums[i]) && (i - map.get(nums[i])) <= k)
+                    return true;
+            else
+                map.put(nums[i], i);
+        }
+        return false;
+    }
+    
+    public boolean containsDuplicate(int[] nums) {
+        HashSet<Integer> set = new HashSet<>();
+        for(int i = 0; i < nums.length; i++) {
+            if(set.contains(nums[i])) 
+                return true;
+            else
+                set.add(nums[i]);
+        }
+
+        return false;
     }
 
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode tracker = head;
+        while(tracker != null && tracker.next != null) {
+            if(tracker.next.val == val)
+                tracker.next = tracker.next.next;
+            else 
+                tracker = tracker.next;
+        }
 
+        if(head != null && head.val == val)
+            head = head.next;
+        
+        return head;
+    }
+
+    // Input array sorted
+    public int[] twoSum3(int[] numbers, int target) {
+        int[] result = new int[2];
+        int left = 0, right = numbers.length - 1;
+        
+        while(left < right) {
+            if(numbers[left] + numbers[right] > target)
+                right--;
+            else if (numbers[left] + numbers[right] < target)
+                left++;
+            else {
+                result[0] = left + 1;
+                result[1] = right + 1;
+                break;
+            }
+        }
+        
+        return result;
+    }
+
+    public String reverseWords(String s) {
+        StringBuilder result = new StringBuilder();
+
+        for(int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) != ' '){
+                StringBuilder word = new StringBuilder();
+                while(i < s.length() && s.charAt(i) != ' ')
+                    word.append(s.charAt(i++));
+                word.append(' ');
+                result.insert(0, word);
+            }
+        }
+        result.deleteCharAt(result.length() - 1);
+        return result.toString();
+    }
     
     public List<Integer> preorderTraversal(TreeNode root) {
         ArrayList<Integer> preorderList = new ArrayList<>();
@@ -323,7 +403,7 @@ public class Leetcode {
         return result;
     }
     // helper method
-    private static String phoneDigits(char c){
+    /* private static String phoneDigits(char c){
         if(c == '2')
             return "abc";
         if(c == '3')
@@ -342,7 +422,8 @@ public class Leetcode {
             return "wxyz";
         return null;
     }
-
+ */
+    
     // Converts an integer to roman numerals
     public String intToRoman(int num) {
         StringBuilder result = new StringBuilder();
@@ -685,7 +766,7 @@ public class Leetcode {
         return ans;
     }
 
-    // Technically O(n), maybe more memory
+    // Technically O(n), more memory because HashMap
     public int[] twoSum2(int[] nums, int target){
         int[] ans = new int[2];
 

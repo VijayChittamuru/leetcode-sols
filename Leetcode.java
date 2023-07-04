@@ -1,23 +1,119 @@
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
+
 public class Leetcode {
 
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
         
-        TreeNode root = lcTest.new TreeNode(32);
-        root.left = lcTest.new TreeNode(26, lcTest.new TreeNode(19, null, lcTest.new TreeNode(27)), null);  
-        root.right = lcTest.new TreeNode(47, null, lcTest.new TreeNode(56));
-        System.out.println(lcTest.isValidBST(root));
-        
+        TreeNode root = lcTest.cTree(1, null, lcTest.cTree(2, lcTest.cTree(3), null));
+        System.out.println(lcTest.preorderTraversal(root));
     }
 
+
     
+    public List<Integer> preorderTraversal(TreeNode root) {
+        ArrayList<Integer> preorderList = new ArrayList<>();
+        preorder(root, preorderList);
+        return preorderList;
+    }
+    // recursive preorder traversal helper
+    private void preorder(TreeNode root, List<Integer> list) {
+        if(root == null)
+            return;
+        list.add(root.val);
+        preorder(root.left, list);
+        preorder(root.right, list);
+    }
+
+    public int maxProfit(int[] prices) {
+        int minNum = 99999, current = 0, result = 0;
+
+        for(int i = 0; i < prices.length; i++) {
+            if(prices[i] < minNum)
+                minNum = prices[i];
+            current = prices[i] - minNum;
+
+            if(result < current)
+                result = current;
+        }
+
+        return result;
+    }
+
+    public int minDepth(TreeNode root) {
+        if(root == null)
+            return 0;
+        if(root.left == null)
+            return 1 + minDepth(root.right);
+        if(root.right == null)
+            return 1 + minDepth(root.left);
+
+        return 1 + Math.min(minDepth(root.left), minDepth(root.right)); 
+    }
+
+    // List problems. Level order w/ queue, adding to right list pain
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
+        if(root == null)
+            return result;
+        LinkedList<TreeNode> queue = new LinkedList<TreeNode>();
+        int level = 0;
+        ArrayList<Integer> a = new ArrayList<>();
+        queue.offer(root);
+        a.add(root.val);
+
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if(node.left != null)
+                queue.offer(node.left);
+            if(node.right != null)
+                queue.offer(node.right);
+
+            if(level == 0) {
+                level = queue.size();
+                result.add(a);
+                a = new ArrayList<>();
+                if(node != root) {
+                    a.add(node.val);
+                    level--;
+                }
+            }
+            else {
+                a.add(node.val);
+                level--;
+            }
+        }
+        // result.add(a);
+
+        return result;
+    }
+    
+    public int maxDepth(TreeNode root) {
+        if(root == null)
+            return 0;
+
+        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+    }
+
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p == null && q == null)
+            return true;
+        if(p == null && q != null)
+            return false;
+        if(p != null && q == null)
+            return false;
+        if(p.val != q.val)
+            return false;
+        
+        return(isSameTree(p.left, q.left) && isSameTree(p.right, q.right));
+    }
 
     // helper method to find max value of tree
     private int maxValue(TreeNode root) {
@@ -972,16 +1068,6 @@ public class Leetcode {
         return result;
     }
     
-    public ListNode create(int[] values) {
-        ListNode tracker = new ListNode();
-        ListNode head = tracker;
-        for(int i = 0; i < values.length; i++) {
-            tracker.next = new ListNode(values[i]);
-            tracker = tracker.next;
-        }
-        return head.next;
-    }
-
     // Adds two numbers where each digit is a node in a linked list
     // Head is least significant digit
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
@@ -1026,6 +1112,26 @@ public class Leetcode {
         return result.next;
     }
 
+    public ListNode create(int[] values) {
+        ListNode tracker = new ListNode();
+        ListNode head = tracker;
+        for(int i = 0; i < values.length; i++) {
+            tracker.next = new ListNode(values[i]);
+            tracker = tracker.next;
+        }
+        return head.next;
+    }
+
+    public TreeNode cTree(int val) {
+        Leetcode lcTest = new Leetcode();
+        return lcTest.new TreeNode(val);
+    }
+    
+    public TreeNode cTree(int val, TreeNode left, TreeNode right) {
+        Leetcode lcTest = new Leetcode();
+        return lcTest.new TreeNode(val, left, right);
+    }
+    
     public class ListNode {
         int val;
         ListNode next;
@@ -1043,7 +1149,7 @@ public class Leetcode {
             return s.toString();
         }
     }
-
+    
     public class TreeNode {
         int val;
         TreeNode left;
@@ -1056,4 +1162,5 @@ public class Leetcode {
             this.right = right;
         }
     }
+
 }

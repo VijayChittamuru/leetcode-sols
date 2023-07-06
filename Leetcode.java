@@ -12,17 +12,73 @@ public class Leetcode {
 
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
-        
-        
-        System.out.println(lcTest.isPowerOfTwo(536870912));
 
+        int[] a1 = {};
+        int[] a2 = {4, 5};
+        System.out.println(lcTest.findMedianSortedArrays(a1, a2));
+    }    
+
+    public void reverseString(char[] s) {
+        int left = 0, right = s.length - 1;
+        char temp;
+
+        while(left < right) {
+            temp = s[right];
+            s[right--] = s[left];
+            s[left++] = temp;
+        }
     }
+
+    // Misunderstood smallest lexicographical order
+    // Removes dupes and returns chars in sorted order
+    public String removeDuplicateLetters(String s) {
+        StringBuilder result = new StringBuilder();
+        boolean[] charAdded = new boolean[26];
+
+        for(int i = 0; i < s.length(); i++) {
+            if(!charAdded[s.charAt(i) - 'a'])
+                charAdded[s.charAt(i) - 'a'] = true;
+        }
+
+        for(int i = 0; i < 26; i++) {
+            if(charAdded[i])
+                result.append((char)('a'+i));
+        }
+        return result.toString();
+    }
+
+    public String getHint(String secret, String guess) {
+        int bulls = 0, cows = 0;
+        int[] count = new int[10];
+        for(int i = 0; i < secret.length(); i++) {
+            char s = secret.charAt(i), g = guess.charAt(i);
+            if(s == g)
+                bulls++;
+            else {
+                // If seen in guess previously then < 0
+                if (count[s - '0'] < 0)
+                    cows++;
+                // vice versa
+                if (count[g - '0'] > 0)
+                    cows++;
+
+                // Character seen in s incremented
+                count[s - '0'] ++;
+                // Character seen in guess decremented
+                count[g - '0'] --;
+            }
+        }
+
+        return (bulls + "A" + cows + "B");
+    }
+
     public boolean isPowerOfTwo(int n) {
         if(n == 0)
             return false;
         double x = Math.log(n)/Math.log(2);
         return (Math.pow(2, Math.round(x)) == n);
     }
+
     public boolean containsNearbyDuplicate(int[] nums, int k) {
         // Value, Index
         HashMap<Integer, Integer> map = new HashMap<>();
@@ -34,11 +90,11 @@ public class Leetcode {
         }
         return false;
     }
-    
+
     public boolean containsDuplicate(int[] nums) {
         HashSet<Integer> set = new HashSet<>();
         for(int i = 0; i < nums.length; i++) {
-            if(set.contains(nums[i])) 
+            if(set.contains(nums[i]))
                 return true;
             else
                 set.add(nums[i]);
@@ -52,13 +108,13 @@ public class Leetcode {
         while(tracker != null && tracker.next != null) {
             if(tracker.next.val == val)
                 tracker.next = tracker.next.next;
-            else 
+            else
                 tracker = tracker.next;
         }
 
         if(head != null && head.val == val)
             head = head.next;
-        
+
         return head;
     }
 
@@ -66,7 +122,7 @@ public class Leetcode {
     public int[] twoSum3(int[] numbers, int target) {
         int[] result = new int[2];
         int left = 0, right = numbers.length - 1;
-        
+
         while(left < right) {
             if(numbers[left] + numbers[right] > target)
                 right--;
@@ -78,7 +134,7 @@ public class Leetcode {
                 break;
             }
         }
-        
+
         return result;
     }
 
@@ -97,7 +153,7 @@ public class Leetcode {
         result.deleteCharAt(result.length() - 1);
         return result.toString();
     }
-    
+
     public List<Integer> preorderTraversal(TreeNode root) {
         ArrayList<Integer> preorderList = new ArrayList<>();
         preorder(root, preorderList);
@@ -135,7 +191,7 @@ public class Leetcode {
         if(root.right == null)
             return 1 + minDepth(root.left);
 
-        return 1 + Math.min(minDepth(root.left), minDepth(root.right)); 
+        return 1 + Math.min(minDepth(root.left), minDepth(root.right));
     }
 
     // List problems. Level order w/ queue, adding to right list pain
@@ -174,7 +230,7 @@ public class Leetcode {
 
         return result;
     }
-    
+
     public int maxDepth(TreeNode root) {
         if(root == null)
             return 0;
@@ -191,7 +247,7 @@ public class Leetcode {
             return false;
         if(p.val != q.val)
             return false;
-        
+
         return(isSameTree(p.left, q.left) && isSameTree(p.right, q.right));
     }
 
@@ -311,10 +367,10 @@ public class Leetcode {
     // Store chars in map with indices, check at end for validity
     // Not done
     public boolean isNumber(String s) {
-        if(s.charAt(0) != '.' || s.charAt(0) != '+' || 
-           s.charAt(0) != '-' || !Character.isDigit(s.charAt(0))) 
+        if(s.charAt(0) != '.' || s.charAt(0) != '+' ||
+           s.charAt(0) != '-' || !Character.isDigit(s.charAt(0)))
             return false;
-        
+
         // Stores character and it's index value
         HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 
@@ -423,13 +479,13 @@ public class Leetcode {
         return null;
     }
  */
-    
+
     // Converts an integer to roman numerals
     public String intToRoman(int num) {
         StringBuilder result = new StringBuilder();
 
         int currentNum = 0;
-        
+
         // Start with 1000s
         currentNum = num/1000;
         for (int i = 0; i < currentNum; i++) {
@@ -517,7 +573,7 @@ public class Leetcode {
         }
 
         // Remove first element
-        if(length == n) 
+        if(length == n)
             return head.next;
 
         int toRemove = length - n;
@@ -542,16 +598,16 @@ public class Leetcode {
             // Push open chars onto stack
             if(s.charAt(i) == '(' || s.charAt(i) == '{' || s.charAt(i) == '[')
                 stack.push(s.charAt(i));
-            
+
             // First encountered char is closing bracket
             else if(stack.isEmpty())
                 return false;
-            
+
             else {
                 c = stack.pop();
                 // Must close in same order as opened
-                if((s.charAt(i) == ')' && c != '(') || 
-                   (s.charAt(i) == '}' && c != '{') || 
+                if((s.charAt(i) == ')' && c != '(') ||
+                   (s.charAt(i) == '}' && c != '{') ||
                    (s.charAt(i) == ']' && c != '['))
                     return false;
             }
@@ -592,7 +648,7 @@ public class Leetcode {
             }
             return;
         }
-        
+
         boolean firstRowZ = false, firstColZ = false, bothZ = false;
         // Runs through only first row and column to find zeroes
         if(matrix[0][0] == 0)
@@ -610,8 +666,8 @@ public class Leetcode {
                     break;
                 }
             }
-        }   
-        
+        }
+
         // Runs through the whole array and finds zeroes
         for(int i = 1; i < matrix.length; i++){
             for(int j = 1; j < matrix[i].length; j++) {
@@ -669,10 +725,10 @@ public class Leetcode {
         }
         for(int i = 0; i < numZ; i++)
             nums[i] = 0;
-        
+
         for(int i = numZ; i < (numZ + numO); i++)
             nums[i] = 1;
-        
+
         for(int i = numZ+numO; i < nums.length; i++)
             nums[i] = 2;
     }
@@ -709,7 +765,7 @@ public class Leetcode {
             return 1;
         if (n == 1)
             return x;
-        
+
         double mult = x;
 
         if(n < 0){
@@ -783,7 +839,7 @@ public class Leetcode {
                 ans[0] = map.get(diff);
                 ans[1] = i;
                 return ans;
-            } 
+            }
         }
 
         return ans;
@@ -804,7 +860,7 @@ public class Leetcode {
     public ListNode deleteDuplicates(ListNode head) {
         if(head == null)
             return head;
-        
+
         ListNode tracker = head;
         while(tracker.next != null) {
             if(tracker.val == tracker.next.val){
@@ -871,7 +927,7 @@ public class Leetcode {
         }
 
         // Check boxes
-        
+
         return true;
     }
 
@@ -916,7 +972,7 @@ public class Leetcode {
 
         if(isNeg)
             return -(quotient - 1);
-        
+
         return quotient-1;
     }
 
@@ -924,7 +980,7 @@ public class Leetcode {
     // Very slow and memory inefficient, uses HashMap
     // Redo maybe w HashSet
     public int lengthOfLongestSubstring(String s) {
-        
+
         HashMap<Character, Integer> map = new HashMap<Character, Integer>(s.length());
         // Store char and key in hashmap, if dupe found, start checking again at iDup + 1
         int result = 0;
@@ -938,7 +994,7 @@ public class Leetcode {
                 length++;
                 i++;
             }
-            else{   
+            else{
                 result = Math.max(result, length);
                 length = 0;
                 i = map.get(s.charAt(i)) + 1;
@@ -967,7 +1023,7 @@ public class Leetcode {
         }
 
         return maxArea;
-    } 
+    }
 
     // Converts given string into ZigZag format based on numRows
     // Returns the string read row by row
@@ -978,7 +1034,7 @@ public class Leetcode {
             return s;
 
         StringBuilder result = new StringBuilder();
-        
+
         char[][] ziggy = new char[numRows][s.length()];
 
         int i = 0, row = 0, col = 0;
@@ -1007,7 +1063,7 @@ public class Leetcode {
 
         return result.toString();
     }
-    
+
     // WIP, faster but not complete
     public String convert2(String s, int numRows) {
         StringBuilder result = new StringBuilder();
@@ -1042,7 +1098,7 @@ public class Leetcode {
         num = x;
 
         double multD = Math.pow(10, exp);
-        
+
         int mult = (int)multD;
 
         // Checks if overflow
@@ -1058,7 +1114,7 @@ public class Leetcode {
         // Checks if overflow
         if((isNeg && result > 0) || (!isNeg && result < 0))
             return 0;
-        
+
         return result;
     }
 
@@ -1079,7 +1135,7 @@ public class Leetcode {
         }
         else if(noSpace.charAt(0) == '+')
             i++;
-            
+
         while(i < noSpace.length() && Character.isDigit(noSpace.charAt(i))){
             // Checks if there is at least 1 digit
             readDigits = true;
@@ -1109,32 +1165,31 @@ public class Leetcode {
     // Finds the median value of two sorted arrays
     // Can check only when combined length is odd. Even is WIP
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        
+
         // Cases when 1 array is empty
         if(nums2.length == 0) {
             int length = nums1.length;
             if(length % 2 == 1)
                 return nums1[(int)Math.floor(length / 2)];
             else
-                return (nums1[length/2] + nums1[(length/2) - 1])/2;
+                return (nums1[length/2] + nums1[(length/2) - 1])/2.0;
         }
         else if (nums1.length == 0){
             int length = nums2.length;
             if(length % 2 == 1)
                 return nums2[(int)Math.floor(length / 2)];
             else
-                return (nums2[length/2] + nums2[(length/2) - 1])/2;
+                return (nums2[length/2] + nums2[(length/2) - 1])/2.0;
         }
 
-
         int totalLength = nums1.length + nums2.length;
-        int result = 0;
+        double result = 0;
 
         // length is odd
         if(totalLength % 2 == 1) {
             int index = totalLength/2;
             int count = 0, i = 0, j = 0;
-            while(count != index+1) {
+            while(count != index+1 && i < nums1.length && j < nums2.length) {
                 if(nums1[i] < nums2[j]) {
                     result = nums1[i++];
                     count++;
@@ -1144,11 +1199,58 @@ public class Leetcode {
                     count++;
                 }
             }
+            while(count != index+1 && i < nums1.length) {
+                result = nums1[i++];
+                count++;
+            }
+            while(count != index+1 && j < nums2.length) {
+                result = nums2[j++];
+                count++;
+            }
         }
+        else {
+            int index = totalLength/2;
+            double val1 = 0, val2 = 0;
+            int count = 0, i = 0, j = 0;
+            while(count != index && i < nums1.length && j < nums2.length) {
+                if(nums1[i] < nums2[j]) {
+                    val1 = nums1[i++];
+                    count++;
+                }
+                else{
+                    val1 = nums2[j++];
+                    count++;
+                }
+            }
+            while(count != index && i < nums1.length) {
+                val1 = nums1[i++];
+                count++;
+            }
+            while(count != index && j < nums2.length) {
+                val1 = nums2[j++];
+                count++;
+            }
 
+            if(i >= nums1.length)
+                val2 = nums2[j];
+
+            else if(j >= nums2.length)
+                val2 = nums1[i];
+
+            else if(nums1[i] > nums2[j])
+                val2 = nums2[j];
+
+            else
+                val2 = nums1[i];
+            
+            System.out.println(val1);
+            System.out.println(val2);
+            result = (val1+val2)/2;
+        }
+        
         return result;
     }
-    
+
     // Adds two numbers where each digit is a node in a linked list
     // Head is least significant digit
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
@@ -1207,12 +1309,12 @@ public class Leetcode {
         Leetcode lcTest = new Leetcode();
         return lcTest.new TreeNode(val);
     }
-    
+
     public TreeNode cTree(int val, TreeNode left, TreeNode right) {
         Leetcode lcTest = new Leetcode();
         return lcTest.new TreeNode(val, left, right);
     }
-    
+
     public class ListNode {
         int val;
         ListNode next;
@@ -1230,7 +1332,7 @@ public class Leetcode {
             return s.toString();
         }
     }
-    
+
     public class TreeNode {
         int val;
         TreeNode left;

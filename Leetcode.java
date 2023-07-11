@@ -13,10 +13,91 @@ public class Leetcode {
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
 
-        int[] a1 = {};
-        int[] a2 = {4, 5};
-        System.out.println(lcTest.findMedianSortedArrays(a1, a2));
+        int[] a1 = {0,1,2,3,5,7, 8,10};
+        System.out.println(lcTest.summaryRanges(a1));
     }    
+
+    
+
+    // Divides sorted array into list of all inclusive ranges
+    // O(N) time. Noticeable difference when not using StringBuilder
+    public List<String> summaryRanges(int[] nums) {
+        ArrayList<String> result = new ArrayList<>();
+        if(nums.length == 0)
+            return result;
+        
+        int first = nums[0], last = nums[0];
+        // <= to add last element
+        for(int i = 1; i <= nums.length; i++) {
+            // If in range, change last
+            if(i != nums.length && nums[i] - 1 == last) {
+                last = nums[i];
+            }
+            // If encountered value not in range, add range to list
+            else {
+                StringBuilder b = new StringBuilder();
+                // If range and not single value
+                if(first != last) {
+                    b.append(first);
+                    b.append("->");
+                    b.append(last);
+                }
+                else {
+                    b.append(last);
+                }
+                result.add(b.toString());
+                // Current element is next range starting point
+                if(i != nums.length) {
+                    first = nums[i];
+                    last = nums[i];
+                }
+            }
+        }
+        return result;
+    }
+
+    // Reverses Linked List
+    public ListNode reverseList(ListNode head) {
+        ListNode previous = null, current = head, next = null;
+        while(current != null) {
+            next = current.next;
+            current.next = previous;
+            previous = current;
+            current = next;
+        }
+        head = previous;
+        return head;
+    }
+
+    // Not done, but close (I think), need pen and paper
+    /* public boolean exist(char[][] board, String word) {
+        boolean[][] boardCheck = new boolean[board.length][board[0].length];
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[0].length; j++) {
+                if(board[i][j] == word.charAt(i) && !boardCheck[i][j]) {
+                    boardCheck[i][j] = true;
+                    for(int k = 1; k <= word.length(); k++) {
+                        int left = i - 1, right = i + 1, up = j - 1, down = j + 1;
+                        // Full word found
+                        if(k == word.length())
+                            return true;
+                        else if(left >= 0 && board[left][j] == word.charAt(k))
+                            i = left;
+                        else if(up >= 0 && board[i][up] == word.charAt(k))
+                            j = up;
+                        else if(down < board.length && board[i][down] == word.charAt(k))
+                            j = down;
+                        else if(right < board[0].length && board[right][j] == word.charAt(k))
+                            i = right;
+                        else
+                            break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+ */   
 
     public void reverseString(char[] s) {
         int left = 0, right = s.length - 1;

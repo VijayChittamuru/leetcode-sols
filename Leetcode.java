@@ -13,9 +13,68 @@ public class Leetcode {
     public static void main(String args[]) {
         Leetcode lcTest = new Leetcode();
 
-        int[] a1 = {0,1,2,3,5,7, 8,10};
-        System.out.println(lcTest.summaryRanges(a1));
+        System.out.println(lcTest.countAndSay(10));
     }    
+
+    
+
+
+    public String countAndSay(int n) {
+        if(n == 1) {
+            return "1";
+        }
+        else {
+            return say(countAndSay(n - 1));
+        }
+    }
+
+    private String say(String sayValue) {
+        int sum = 0;
+        int n = sayValue.length() - 1;
+        StringBuilder result = new StringBuilder();
+
+        while(n >= 0) {
+            sum = 0;
+            char current = sayValue.charAt(n);
+            while(n >= 0  && sayValue.charAt(n) == current) {
+                sum++;
+                n -= 1;
+            }
+            result.insert(0, current).insert(0, sum);
+        }
+        return result.toString();
+    }
+
+    public int searchInsert(int[] nums, int target) {
+        int[] searchResult = binarySearch(nums, 0, nums.length - 1, target);
+        if(searchResult[0] == target) {
+            return searchResult[1];
+        }
+        else if (searchResult[0] > target) {
+            return searchResult[1] - 1;
+        }
+        else {
+            return searchResult[1] + 1;
+        }
+    }
+
+    private int[] binarySearch(int[] nums, int m, int n, int target) {
+        int mid = (m+n)/2;
+        if(m == n) {
+            return new int[]{nums[m], m};
+        }
+        else if(nums[mid] == target) {
+            return new int[]{nums[mid], mid};
+        }
+        else if(nums[mid] > target) {
+            n = mid - 1;
+            return binarySearch(nums, m, n, target);
+        }
+        else {
+            m = mid + 1;
+            return binarySearch(nums, m, n, target);
+        }
+    }
 
     // Happy Number
     public boolean isHappy(int n) {

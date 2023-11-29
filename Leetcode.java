@@ -17,8 +17,24 @@ public class Leetcode {
         System.out.println(lcTest.summaryRanges(a1));
     }    
 
+    // Happy Number
+    public boolean isHappy(int n) {
+        HashSet<Integer> reached = new HashSet<Integer>();
+        int sum = 0, m = n;
+        while(sum != 1) {
+            sum = 0;
+            while(m != 0) {
+                sum += Math.pow(m % 10, 2);
+                m /= 10;
+            }
+            if(!reached.add(sum)) {
+                return false;
+            }
+            m = sum;
+        }
+        return true;
+    }
     
-
     // Divides sorted array into list of all inclusive ranges
     // O(N) time. Noticeable difference when not using StringBuilder
     public List<String> summaryRanges(int[] nums) {
@@ -1246,7 +1262,6 @@ public class Leetcode {
     // Finds the median value of two sorted arrays
     // Can check only when combined length is odd. Even is WIP
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-
         // Cases when 1 array is empty
         if(nums2.length == 0) {
             int length = nums1.length;
@@ -1324,8 +1339,6 @@ public class Leetcode {
             else
                 val2 = nums1[i];
             
-            System.out.println(val1);
-            System.out.println(val2);
             result = (val1+val2)/2;
         }
         
